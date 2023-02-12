@@ -39,6 +39,24 @@ public class Expense {
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    public Expense(String description,
+                   List<Category> categoryIds,
+                   String amount,
+                   String currency,
+                   LocalDate paymentDate,
+                   String debtor,
+                   PaymentMethod paymentMethodId,
+                   String notes) {
+        this.description = description;
+        this.categoryIds = categoryIds;
+        this.setAmount(amount);
+        this.currency = currency;
+        this.paymentDate = paymentDate;
+        this.debtor = debtor;
+        this.paymentMethodId = paymentMethodId;
+        this.notes = notes;
+    }
+
     public void setAmount(String amount) {
         amount = amount.replace(",", ".");
         double doubleAmount = Double.parseDouble(amount);

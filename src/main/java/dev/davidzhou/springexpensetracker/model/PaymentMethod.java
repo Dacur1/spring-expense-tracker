@@ -15,4 +15,8 @@ public class PaymentMethod {
     @Id
     private String id;
     private String paymentMethod;
+
+    public PaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
 }
