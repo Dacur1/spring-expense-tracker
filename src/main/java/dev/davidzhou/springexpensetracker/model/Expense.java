@@ -27,6 +27,7 @@ import java.util.List;
 @Document(collection = "expenses")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Expense {
 
@@ -39,7 +40,6 @@ public class Expense {
     @Min(value = 1, message = "At least one category is required")
     @UniqueElements(message = "Categories must be unique")
     private List<Category> categoryIds;
-
 
     @Min(value = 1, message = "Amount must be greater than 0")
     private BigDecimal amount;
