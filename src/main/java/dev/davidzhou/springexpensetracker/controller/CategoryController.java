@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/category")
@@ -25,35 +26,36 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getAllCategories());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Category> getSingleCategoryById(@PathVariable ObjectId id) {
-        return ResponseEntity.ok(categoryService.getCategoryById(id));
-    }
     @GetMapping("/{categoryName}")
     public ResponseEntity<Category> getSingleCategoryByName(@PathVariable String categoryName) {
-        return ResponseEntity.ok(categoryService.getCategoryByCategoryName(categoryName));
+        return categoryService.getCategoryByCategoryName(categoryName);
     }
 
     @PostMapping
-    public ResponseEntity addCategory(@RequestBody String categoryName) {
-        categoryService.addSingleCategory(categoryName);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<Category> addCategory(@RequestBody Map<String, String> payload) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(categoryService.addSingleCategory(
+                        payload.get("categoryName")));
     }
 
-    @PutMapping
-    public ResponseEntity updateCategory(@RequestBody Category category) {
-        categoryService.updateCategory(category);
-        return ResponseEntity.status(HttpStatus.OK).build();
+    @PutMapping("/update/{categoryName}")
+    public ResponseEntity<Category> updateCategory(
+            @PathVariable String categoryName,
+            @RequestBody Map<String, String> payload) {
+
+        String newCategoryName = payload.get("newCategoryName");
+
+        return categoryService.updateCategory(categoryName, newCategoryName);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteCategory(@PathVariable ObjectId id) {
+    public ResponseEntity<String> deleteCategory(@PathVariable ObjectId id) {
         categoryService.deleteCategory(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping("/search/{charSequence}")
-    public ResponseEntity<List<Category>> getAllCategoriesByChar(String charSequence) {
-        return ResponseEntity.ok(categoryService.getAllCategoriesByChar(charSequence));
+    public ResponseEntity<List<Category>> getAllCategoriesByChar(@PathVariable String charSequence) {
+        return categoryService.getAllCategoriesByChar(charSequence);
     }
 }

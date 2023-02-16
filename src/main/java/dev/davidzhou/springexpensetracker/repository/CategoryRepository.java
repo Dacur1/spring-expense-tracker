@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface CategoryRepository extends MongoRepository<Category, ObjectId> {
-    Optional<Category> findByCategoryName(String categoryName);
+    Optional<Category> findFirstByCategoryNameEqualsIgnoreCase(String categoryName);
     List<Category> findAllByCategoryNameContainingIgnoreCaseOrderByCategoryNameAsc(String charSequence);
 }

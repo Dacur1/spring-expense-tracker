@@ -4,6 +4,7 @@ import dev.davidzhou.springexpensetracker.model.Category;
 import dev.davidzhou.springexpensetracker.repository.CategoryRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,31 +23,48 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
-    public void addSingleCategory(String categoryName){
-        categoryRepository.insert(new Category(categoryName));
+    public Category addSingleCategory(String categoryName){
+        return categoryRepository.insert(new Category(categoryName));
     }
 
-    public void updateCategory(Category category) {
-        Category categoryToUpdate = categoryRepository.findById(category.getId())
-                .orElseThrow(() -> new RuntimeException(
-                        "Category with id " + category.getId() + " does not exist."));
-        categoryToUpdate.setCategoryName(category.getCategoryName());
+    public ResponseEntity<Category> updateCategory(String categoryName, String newCategoryName) {
+        Category category = categoryRepository.findFirstByCategoryNameEqualsIgnoreCase(categoryName)
+                .orElse(null);
 
-        categoryRepository.save(categoryToUpdate);
+        if (category == null) {
+            return ResponseEntity.status(404).build();
+        }
+
+        if (category.getCategoryName().equals(newCategoryName)) {
+            return ResponseEntity.status(400).build();
+        }
+
+        category.setCategoryName(newCategoryName);
+        categoryRepository.save(category);
+
+
+        return ResponseEntity.ok(category);
     }
 
-    public Category getCategoryByCategoryName(String categoryName) {
-        return categoryRepository.findByCategoryName(categoryName).orElseThrow(() -> new RuntimeException(
-                "Category with name " + categoryName + " does not exist."));
+    public ResponseEntity<Category> getCategoryByCategoryName(String categoryName) {
+        Category category = categoryRepository.findFirstByCategoryNameEqualsIgnoreCase(categoryName)
+                .orElse(null);
+
+        if (category == null) {
+            return ResponseEntity.status(404).build();
+        }
+
+        return ResponseEntity.ok(category);
     }
 
-    public Category getCategoryById(ObjectId id) {
-        return categoryRepository.findById(id).orElseThrow(() -> new RuntimeException(
-                "Category with id " + id + " does not exist."));
-    }
+    public ResponseEntity<List<Category>> getAllCategoriesByChar(String charSequence) {
+        List<Category> categories = categoryRepository.findAllByCategoryNameContainingIgnoreCaseOrderByCategoryNameAsc(charSequence);
 
-    public List<Category> getAllCategoriesByChar(String charSequence) {
-        return categoryRepository.findAllByCategoryNameContainingIgnoreCaseOrderByCategoryNameAsc(charSequence);
+        if (categories.isEmpty()) {
+            return ResponseEntity.status(404).build();
+        }
+
+        return ResponseEntity.ok(categories);
     }
     public void deleteCategory(ObjectId id) {
         categoryRepository.deleteById(id);
