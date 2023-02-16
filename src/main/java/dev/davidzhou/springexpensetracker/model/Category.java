@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,14 +19,14 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Category {
 
     @Id
-    private String id;
+    private ObjectId id;
     @NonNull
     @NotEmpty(message = "A category description is required")
     @Size(min = 1, max = 50, message = "Category description must be between 1 and 50 characters")
-    private String category;
+    private String categoryName;
 
-    public Category(String category) {
-        this.category = category;
+    public Category(String categoryName) {
+        this.categoryName = categoryName;
     }
 
 }
