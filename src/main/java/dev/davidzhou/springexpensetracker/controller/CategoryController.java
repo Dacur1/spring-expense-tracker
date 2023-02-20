@@ -30,6 +30,10 @@ public class CategoryController {
     public ResponseEntity<Category> getSingleCategoryByName(@PathVariable String categoryName) {
         return categoryService.getCategoryByCategoryName(categoryName);
     }
+    @GetMapping("/search/{charSequence}")
+    public ResponseEntity<List<Category>> getAllCategoriesByChar(@PathVariable String charSequence) {
+        return categoryService.getAllCategoriesByChar(charSequence);
+    }
 
     @PostMapping
     public ResponseEntity<Category> addCategory(@RequestBody Map<String, String> payload) {
@@ -54,8 +58,4 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping("/search/{charSequence}")
-    public ResponseEntity<List<Category>> getAllCategoriesByChar(@PathVariable String charSequence) {
-        return categoryService.getAllCategoriesByChar(charSequence);
-    }
 }

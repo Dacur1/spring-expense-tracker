@@ -103,4 +103,7 @@ public class Expense {
         this.amount = new BigDecimal(amount).setScale(2, RoundingMode.HALF_UP);
     }
 
+    /**
+     * TODO: Add "addCategoryToList" and "removeCategoryFromList" methods
+     */
 }

@@ -2,12 +2,10 @@ package dev.davidzhou.springexpensetracker.model;
 
 import com.mongodb.lang.NonNull;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
@@ -20,11 +18,9 @@ public class PaymentMethod {
     private String id;
     @NonNull
     @NotEmpty(message = "A payment method description is required")
-    @Size(min = 1, max = 50, message = "Payment method description must be between 1 and 50 characters")
-    @Indexed(unique = true)
-    private String paymentMethod;
+    private String paymentMethodName;
 
-    public PaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
+    public PaymentMethod(String paymentMethodName) {
+        this.paymentMethodName = paymentMethodName;
     }
 }
